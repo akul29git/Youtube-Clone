@@ -1,0 +1,40 @@
+import mongoose, { Aggregate, Schema } from "mongoose"
+import mongooseAggregatePaginate from "mongoose-aggregate-paginate-v2"
+import {v2} from 'cloudinary'
+
+const videoSchema=new Schema(
+    {
+        videofile:{
+            type:String, //from 3rd party storage
+            required:true,
+        },
+        thumbnail:{
+            type:String,
+            required:true,
+        },
+        description:{
+            type:String,
+            required:true,
+        },
+        durarion:{
+            type:Number,
+            required:true,
+        },
+        views:{
+            type:Number,
+            default:0
+        },
+        isPublished:{
+            type:Boolean,
+            default:true
+        },
+        owner:{
+            type:Schema.Types.ObjectId,
+            ref:"User"
+        }
+        
+    },{timestamps:true}
+)
+// v2.uploader.upload
+videoSchema.plugin(mongooseAggregatePaginate)
+export const Video=mongoose.model("Video",videoSchema)
