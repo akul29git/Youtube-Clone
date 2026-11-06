@@ -49,6 +49,7 @@ const userSchema=new Schema(
     },{timestamps:true}
 )
 
+// middleware to hash password before saving to database
 userSchema.pre('save' ,async function(next){
     if(!this.isModified("password")) return next();
     
@@ -56,10 +57,12 @@ userSchema.pre('save' ,async function(next){
     next();
 })
 
+// instance method to compare password
 userSchema.methods.isPasswordCorrect= async function(password) {
     return await bcrypt.compare(password,this.password)
 }
 
+// generate access token using jwt
 userSchema.methods.generateAccessToken=function(){
     return jwt.sign(
         {
@@ -69,7 +72,8 @@ userSchema.methods.generateAccessToken=function(){
             username:this.username
         },process.env.ACCESS_TOKEN_SECRET,
         {
-            expIn:process.env.ACCESS_TOKEN_EXPIRY
+            expIn:process.env.ACCESS_TOKEN_EXPIRY,
+            algorithm: "HS256",
         }
         
     )
@@ -79,7 +83,7 @@ userSchema.methods.generateRefreshToken=function(){
         {
             _id:this._id
 
-        },REFRESH_TOKEN_SECRET,
+        },process.env.REFRESH_TOKEN_SECRET,
         {
             expIn:process.env.REFRESH_TOKEN_EXPIRY
         }
