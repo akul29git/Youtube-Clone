@@ -33,7 +33,7 @@ class ApiResponse {
     }
 }
 
-export default ApiResponse
+export {ApiResponse}
 
 // This class is used to create a consistent API response format for the application. It has a constructor 
 // that takes in a message, data, success status, and status code. The class also has static methods for creating 

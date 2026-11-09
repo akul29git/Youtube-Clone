@@ -9,9 +9,8 @@ dotenv.config({
 
 dbConnect()
  .then(()=>{
-    app.listen(process.env.PORT || 8000,(req,res)=>{
+    app.listen(process.env.PORT || 8000,()=>{
         console.log(`src/index.js: server is running at port ${process.env.PORT}`);
-        res.send("server is running")
         
     })
  })

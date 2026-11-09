@@ -3,8 +3,8 @@ import fs from 'fs'
 
 v2.config({
     cloud_name:process.env.CLOUDINARY_CLOUD_NAME,
-    cloud_apiKey:process.env.CLOUDINARY_API_KEY,
-    cloud_secret:process.env.CLOUDINARY_API_SECRET
+    api_key:process.env.CLOUDINARY_API_KEY,
+    api_secret:process.env.CLOUDINARY_API_SECRET
 })
 
 const uploadCloud=async (localFilePath)=>{
@@ -13,15 +13,15 @@ const uploadCloud=async (localFilePath)=>{
         const response=await v2.uploader.upload(localFilePath,{
             resource_type:"auto"
         })
-        if(response) return console.log("file uploaded successfully")
+        if(response)  console.log("file uploaded successfully")
         fs.unlinkSync(localFilePath)
         return response;
     }
     catch(error){
-        fs.unlinkSync(localFilePath)
         console.log("file upload was unsuccesfull::ERROR",error)
+        if (fs.existsSync(localFilePath)) fs.unlinkSync(localFilePath)
         return null
     }
 }
 
-export {uploadCloud}
+export { uploadCloud }
