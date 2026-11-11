@@ -3,10 +3,11 @@ const asyncHandler=(requestHandler)=> {
         Promise
          .resolve(requestHandler(req,res,next))
          .catch((error)=>{
-            res.status(error.status || 500).json({
-                status:false,
-                message:error.message
-            })
+            // res.status(error.status || 500).json({
+            //     status:false,
+            //     message:error.message
+            // })
+
             next(error)
         })
     }
