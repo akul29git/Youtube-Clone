@@ -7,7 +7,7 @@ const asyncHandler=(requestHandler)=> {
             //     status:false,
             //     message:error.message
             // })
-
+            // console.log("Error in asyncHandler:",error)
             next(error)
         })
     }

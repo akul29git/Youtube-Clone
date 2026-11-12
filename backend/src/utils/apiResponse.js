@@ -5,8 +5,8 @@ class ApiResponse {
         success=true,
         statusCode=200
     ){
-        if(!Number.isInteger(statusCode) || statusCode < 100 || statusCode > 399){
-            throw new RangeError(`Invalid status code: ${statusCode}. Status code must be an integer between 100 and 399.`)
+        if(!Number.isInteger(statusCode) || statusCode < 100 || statusCode > 499){
+            throw new RangeError(`Invalid status code: ${statusCode}. Status code must be an integer between 100 and 499.`)
         }
 
         this.statusCode=statusCode
