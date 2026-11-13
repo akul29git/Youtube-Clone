@@ -4,6 +4,7 @@ import { User } from "../modles/user.js"
 import { uploadCloud } from "../utils/cloudinary.js"
 import { ApiResponse } from "../utils/apiResponse.js"
 import jwt from "jsonwebtoken"
+import fs from "fs"
 
 
 const generateTokens=async(userId)=>{
@@ -35,6 +36,8 @@ const reqisterUser=asyncHandler(async(req,res)=>{
     })
 
     if(existingUser){
+        fs.unlinkSync(req.files?.avatar?.[0]?.path)
+        fs.unlinkSync(req.files?.coverimage?.[0]?.path)
         throw new ApiError(409,"User already exists, please login")
     }
 
