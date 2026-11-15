@@ -12,10 +12,16 @@ export const verifyUser=asyncHandler(async(req,res,next)=>{
             })
         }
         const decoded=jwt.verify(token,process.env.ACCESS_TOKEN_SECRET)
+        if(!decoded){
+            return res.status(401).json({
+                response: new ApiResponse("Unauthorized access, please login",null,false,401)
+            })
+        }
+        // also check if the refersh token is null or not
+        // if null do not grant access to the user and ask them to login again
 
-        const user=await User.findById(decoded._id).select("-password -refreshtoken ")
-
-        if(!user){
+        const user=await User.findById(decoded._id).select("-password")
+        if(!user || !user.refreshtoken){
             return res.status(401).json({
                 response: new ApiResponse("Unauthorized access, please login",null,false,401)
             })
