@@ -41,7 +41,7 @@ const userSchema=new Schema(
         ],
         password:{
             type:String,
-            requied:[true,"password is required"]
+            required:[true,"password is required"]
         },
         refreshtoken:{
             type:String
@@ -49,17 +49,19 @@ const userSchema=new Schema(
     },{timestamps:true}
 )
 
-userSchema.pre('save' ,async function(next){
-    if(!this.isModified("password")) return next();
-    
-    this.password=await bcrypt.hash(this.password,10)
-    next();
+// middleware to hash password before saving to database
+userSchema.pre('save' ,async function(){
+    if(!this.isModified("password")) return
+
+    this.password = await bcrypt.hash(this.password,10)
 })
 
+// instance method to compare password
 userSchema.methods.isPasswordCorrect= async function(password) {
     return await bcrypt.compare(password,this.password)
 }
 
+// generate access token using jwt
 userSchema.methods.generateAccessToken=function(){
     return jwt.sign(
         {
@@ -69,9 +71,10 @@ userSchema.methods.generateAccessToken=function(){
             username:this.username
         },process.env.ACCESS_TOKEN_SECRET,
         {
-            expIn:process.env.ACCESS_TOKEN_EXPIRY
+            expiresIn:process.env.ACCESS_TOKEN_EXPIRY,
+            algorithm: "HS256",
         }
-        
+
     )
 }
 userSchema.methods.generateRefreshToken=function(){
@@ -79,9 +82,9 @@ userSchema.methods.generateRefreshToken=function(){
         {
             _id:this._id
 
-        },REFRESH_TOKEN_SECRET,
+        },process.env.REFRESH_TOKEN_SECRET,
         {
-            expIn:process.env.REFRESH_TOKEN_EXPIRY
+            expiresIn:process.env.REFRESH_TOKEN_EXPIRY
         }
     )
 }
