@@ -5,7 +5,7 @@ import { uploadCloud } from "../utils/cloudinary.js"
 import { ApiResponse } from "../utils/apiResponse.js"
 import jwt from "jsonwebtoken"
 import fs from "fs"
-
+import { passwordPolicy } from "../utils/passwordPolicy.js"
 
 const generateTokens=async(userId)=>{
 
@@ -29,6 +29,11 @@ const reqisterUser=asyncHandler(async(req,res)=>{
         [username,email,password,fullname].some((field)=> !field || field.trim() === "")
     ){
         throw new ApiError(400,"Please provide all the required fields")
+    }
+
+    const passwordValidationResult=passwordPolicy(password)
+    if(passwordValidationResult.success=== false){
+        throw new ApiError(400,passwordValidationResult.error)
     }
 
     const existingUser = await User.findOne({
