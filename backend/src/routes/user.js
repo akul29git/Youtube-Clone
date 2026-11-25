@@ -2,6 +2,7 @@ import { Router } from 'express'
 import { reqisterUser,loginUser,logoutUser,renewAccessToken } from '../controllers/user.js'
 import {  upload } from '../middleware/multer.js'
 import { verifyUser } from '../middleware/auth.js'
+import { loginLimiter } from '../middleware/security.js'
 
 const userRouter = Router()
 
@@ -13,7 +14,7 @@ userRouter.route("/register").post(
     ,reqisterUser
 )
 
-userRouter.route("/login").post(loginUser)
+userRouter.route("/login").post(loginLimiter,loginUser)
 
 userRouter.route("/logout").post(verifyUser,logoutUser)
 

@@ -2,8 +2,12 @@ import express from 'express'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
 import { errorHandler } from './middleware/errorHandler.js'
+import { requestLogger } from './middleware/security.js'
 
 const app=express()
+
+// Request logging middleware
+app.use(requestLogger)
 
 // CORS configuration
 const corsOrigin=(process.env.CORS_ORIGIN || "http://localhost:3000")
